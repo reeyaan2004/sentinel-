@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Sentinel</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800;900&display=swap" rel="stylesheet" />
+  <style>
+    *, *::before, *::after {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      font-family: 'Nunito', sans-serif;
+    }
+
+    :root {
+      --navy: #060D1A;
+      --navy-mid: #0A1628;
+      --navy-light: #0F2040;
+      --aqua: #00C8FF;
+      --aqua-glow: rgba(0, 200, 255, 0.25);
+      --aqua-faint: rgba(0, 200, 255, 0.07);
+      --amber: #FFB347;
+      --danger: #FF4D6D;
+      --safe: #00E5A0;
+      --glass-bg: rgba(10, 22, 40, 0.75);
+      --glass-border: rgba(0, 200, 255, 0.12);
+      --blur: 14px;
+    }
+
+    html, body {
+      width: 420px;
+      min-width: 420px;
+      max-width: 420px;
+      min-height: 580px;
+      background: #060D1A;
+      color: white;
+      overflow-x: hidden;
+      overflow-y: auto;
+    }
+
+    .aero-overlay {
+      position: fixed;
+      inset: 0;
+      z-index: 0;
+      background:
+        radial-gradient(ellipse 70% 50% at 15% 15%, rgba(0, 200, 255, 0.12) 0%, transparent 60%),
+        radial-gradient(ellipse 50% 70% at 85% 85%, rgba(0, 80, 180, 0.15) 0%, transparent 60%),
+        linear-gradient(180deg, #060D1A 0%, #080F1E 100%);
+      pointer-events: none;
+    }
+
+    .glass {
+      background: var(--glass-bg);
+      backdrop-filter: blur(var(--blur));
+      -webkit-backdrop-filter: blur(var(--blur));
+      border: 1px solid var(--glass-border);
+      border-radius: 14px;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .glass::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 10%;
+      right: 10%;
+      height: 1px;
+      background: linear-gradient(90deg, transparent, rgba(0, 200, 255, 0.4), transparent);
+    }
+
+    .glow-aqua { box-shadow: 0 0 24px var(--aqua-glow), 0 0 48px rgba(0,200,255,0.08); }
+    .glow-danger { box-shadow: 0 0 24px rgba(255,77,109,0.25); }
+    .glow-safe { box-shadow: 0 0 24px rgba(0,229,160,0.25); }
+
+    @keyframes spin {
+      from { transform: rotate(0deg); }
+      to { transform: rotate(360deg); }
+    }
+
+    @keyframes sentinel-pulse {
+      0%, 100% { opacity: 1; transform: scale(1); }
+      50% { opacity: 0.55; transform: scale(0.97); }
+    }
+    .pulse { animation: sentinel-pulse 2.2s ease-in-out infinite; }
+
+    ::-webkit-scrollbar { width: 3px; }
+    ::-webkit-scrollbar-track { background: transparent; }
+    ::-webkit-scrollbar-thumb { background: var(--aqua-glow); border-radius: 4px; }
+
+    button { cursor: pointer; border: none; background: none; font-family: 'Nunito', sans-serif; }
+    textarea { resize: none; font-family: 'Nunito', sans-serif; outline: none; }
+  </style>
+</head>
+<body>
+  <div id="root"></div>
+  <script type="module" src="./main.tsx"></script>
+</body>
+</html>
