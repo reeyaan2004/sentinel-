@@ -1,0 +1,126 @@
+@import url('https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800;900&display=swap');
+
+*, *::before, *::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+  font-family: 'Nunito', sans-serif;
+}
+
+:root {
+  --navy: #060D1A;
+  --navy-mid: #0A1628;
+  --navy-light: #0F2040;
+  --aqua: #00C8FF;
+  --aqua-glow: rgba(0, 200, 255, 0.25);
+  --aqua-faint: rgba(0, 200, 255, 0.07);
+  --amber: #FFB347;
+  --amber-glow: rgba(255, 179, 71, 0.25);
+  --danger: #FF4D6D;
+  --danger-glow: rgba(255, 77, 109, 0.25);
+  --safe: #00E5A0;
+  --safe-glow: rgba(0, 229, 160, 0.25);
+  --glass-bg: rgba(10, 22, 40, 0.75);
+  --glass-border: rgba(0, 200, 255, 0.12);
+  --blur: 14px;
+}
+
+body {
+  width: 420px;
+  min-height: 580px;
+  background: var(--navy);
+  color: white;
+  overflow-x: hidden;
+  overflow-y: auto;
+}
+
+/* The Frutiger Aero animated background */
+.aero-bg {
+  position: fixed;
+  inset: 0;
+  z-index: 0;
+  background-image: url('/assets/aero-bg.jpg');
+  background-size: cover;
+  background-position: center;
+  opacity: 0.18;
+  pointer-events: none;
+}
+
+/* Overlay gradient on top of the texture */
+.aero-overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 0;
+  background:
+    radial-gradient(ellipse 70% 50% at 15% 15%, rgba(0, 200, 255, 0.12) 0%, transparent 60%),
+    radial-gradient(ellipse 50% 70% at 85% 85%, rgba(0, 80, 180, 0.15) 0%, transparent 60%),
+    linear-gradient(180deg, #060D1A 0%, #080F1E 100%);
+  pointer-events: none;
+  animation: aero-breathe 10s ease-in-out infinite alternate;
+}
+
+@keyframes aero-breathe {
+  0%   { opacity: 0.9; }
+  100% { opacity: 1; }
+}
+
+/* Glass panel — apply this class to any card or panel */
+.glass {
+  background: var(--glass-bg);
+  backdrop-filter: blur(var(--blur));
+  -webkit-backdrop-filter: blur(var(--blur));
+  border: 1px solid var(--glass-border);
+  border-radius: 14px;
+  position: relative;
+  overflow: hidden;
+}
+
+/* Top shimmer line on glass panels — Frutiger Aero signature */
+.glass::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 10%;
+  right: 10%;
+  height: 1px;
+  background: linear-gradient(90deg, transparent, rgba(0, 200, 255, 0.4), transparent);
+  border-radius: 100%;
+}
+
+/* Glow utilities */
+.glow-aqua   { box-shadow: 0 0 24px var(--aqua-glow), 0 0 48px rgba(0,200,255,0.08); }
+.glow-amber  { box-shadow: 0 0 24px var(--amber-glow); }
+.glow-danger { box-shadow: 0 0 24px var(--danger-glow); }
+.glow-safe   { box-shadow: 0 0 24px var(--safe-glow); }
+
+/* Spinning animation for loading states */
+@keyframes spin {
+  from { transform: rotate(0deg); }
+  to   { transform: rotate(360deg); }
+}
+
+/* Pulse for monitor widget */
+@keyframes sentinel-pulse {
+  0%, 100% { opacity: 1; transform: scale(1); }
+  50%       { opacity: 0.55; transform: scale(0.97); }
+}
+.pulse { animation: sentinel-pulse 2.2s ease-in-out infinite; }
+
+/* Scrollbar */
+::-webkit-scrollbar { width: 3px; }
+::-webkit-scrollbar-track { background: transparent; }
+::-webkit-scrollbar-thumb { background: var(--aqua-glow); border-radius: 4px; }
+
+/* Button reset */
+button {
+  cursor: pointer;
+  border: none;
+  background: none;
+  font-family: 'Nunito', sans-serif;
+}
+
+textarea {
+  resize: none;
+  font-family: 'Nunito', sans-serif;
+  outline: none;
+}
