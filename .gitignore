@@ -4,7 +4,7 @@ node_modules/
 .venv/
 
 node_modules/
-dist/
+
 .env
 backend/.env
 __pycache__/

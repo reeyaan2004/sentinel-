@@ -16,7 +16,7 @@ export default function HomeTab({ onResult, isScanning, setIsScanning }: {
     setIsScanning(true)
     setError('')
     try {
-      const res = await fetch(`${API_BASE}/analyze`, {
+      const res = await fetch("http://127.0.0.1:8000/analyze", {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ text: input.trim() }),
@@ -167,6 +167,10 @@ ${results.pageText}`
         ))}
       </div>
 
+      
+      
+
+
       {/* Scan current page */}
       <div className="glass" style={{ padding: '10px 12px' }}>
         <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
@@ -192,6 +196,9 @@ ${results.pageText}`
           </button>
         </div>
       </div>
+      
     </motion.div>
+
+    
   )
 }

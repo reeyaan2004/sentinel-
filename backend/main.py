@@ -63,10 +63,21 @@ async def analyze(req: AnalyzeRequest):
         verdict = "SUSPICIOUS"
 
     return {
-        "score": score,
+        "scan_id": "local-test-123",
+        "score": min(score, 100),
         "verdict": verdict,
+        "vectors": {
+            "urgency_manipulation": 9 if "urgent" in text else 1,
+            "domain_spoofing": 3,
+            "credential_harvesting": 7 if "verify" in text else 1,
+            "impersonation": 3,
+            "emotional_manipulation": 4,
+            "url_anomalies": 5 if "click" in text else 1,
+            "attack_patterns": 4,
+            "linguistic_tells": 3,
+        },
         "red_flags": red_flags,
-        "summary": "Temporary rule-based analysis",
+        "summary": "Rule-based analysis of your message.",
         "eli5": "This message may be trying to trick you.",
-        "action_plan": ["Do not click links"] if verdict == "DANGEROUS" else []
+        "action_plan": ["Do not click links", "Report as suspicious"] if verdict != "SAFE" else []
     }
