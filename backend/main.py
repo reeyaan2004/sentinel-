@@ -5,6 +5,8 @@ import os
 
 load_dotenv()
 
+print(os.getenv("GEMINI_API_KEY"))
+
 app = FastAPI(title="Sentinel API")
 
 app.add_middleware(
