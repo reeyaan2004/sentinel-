@@ -5,7 +5,7 @@
   "main": "index.js",
   "scripts": {
     "dev": "vite",
-    "build": "vite build",
+    "build": "vite build && npx esbuild src/content/content-script.ts --bundle --outfile=dist/content.js --format=iife --platform=browser",
     "preview": "vite preview"
   },
   "repository": {
@@ -32,6 +32,7 @@
     "@types/react-dom": "^19.2.3",
     "@vitejs/plugin-react": "^6.0.2",
     "autoprefixer": "^10.5.0",
+    "esbuild": "^0.28.0",
     "postcss": "^8.5.15",
     "tailwindcss": "^3.4.17",
     "typescript": "^6.0.3",
