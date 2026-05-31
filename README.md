@@ -149,6 +149,7 @@ The extension communicates with a backend API for threat analysis. The API retur
 
 Contributions are welcome! Please feel free to submit a Pull Request.
 
-## Author
+## Authors
 
 [@reeyaan2004](https://github.com/reeyaan2004)
+[@IsabelRomero](https://github.com/Isabel-M-Romero)
