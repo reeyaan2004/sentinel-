@@ -4,7 +4,9 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "build": "vite build && npx esbuild src/content/content-script.ts --bundle --outfile=dist/content.js --format=iife --platform=browser"
+    "dev": "vite",
+    "build": "vite build && npx esbuild src/content/content-script.ts --bundle --outfile=dist/content.js --format=iife --platform=browser",
+    "preview": "vite preview"
   },
   "repository": {
     "type": "git",
@@ -36,6 +38,4 @@
     "typescript": "^6.0.3",
     "vite": "^8.0.14"
   }
-
-  
 }

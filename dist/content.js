@@ -7,24 +7,23 @@
   // src/content/content-script.ts
   var require_content_script = __commonJS({
     "src/content/content-script.ts"() {
-      (function() {
-        function extractPageSignals() {
-          return {
-            url: window.location.href,
-            title: document.title,
-            hasPasswordField: !!document.querySelector('input[type="password"]'),
-            hasLoginForm: !!document.querySelector("form"),
-            links: Array.from(document.querySelectorAll("a[href]")).map((a) => a.href).filter((href) => href.startsWith("http")).slice(0, 10),
-            pageText: document.body.innerText.slice(0, 1e3)
-          };
+      function extractPageSignals() {
+        const signals = {
+          url: window.location.href,
+          title: document.title,
+          hasPasswordField: !!document.querySelector('input[type="password"]'),
+          hasLoginForm: !!document.querySelector("form"),
+          links: Array.from(document.querySelectorAll("a[href]")).map((a) => a.href).filter((href) => href.startsWith("http")).slice(0, 10),
+          pageText: document.body.innerText.slice(0, 1e3)
+        };
+        return signals;
+      }
+      chrome.runtime.onMessage.addListener((msg, _sender, sendResponse) => {
+        if (msg.type === "SCAN_PAGE") {
+          sendResponse(extractPageSignals());
         }
-        chrome.runtime.onMessage.addListener((msg, _sender, sendResponse) => {
-          if (msg.type === "SCAN_PAGE") {
-            sendResponse(extractPageSignals());
-          }
-          return true;
-        });
-      })();
+        return true;
+      });
     }
   });
   require_content_script();
