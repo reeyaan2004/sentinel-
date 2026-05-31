@@ -32,4 +32,17 @@ export default defineConfig({
       '@': resolve(__dirname, 'src'),
     },
   },
+  environments: {
+    content: {
+      build: {
+        rollupOptions: {
+          input: resolve(__dirname, 'src/content/content-script.ts'),
+          output: {
+            entryFileNames: 'content.js',
+            format: 'iife',
+          },
+        },
+      },
+    },
+  },
 })
