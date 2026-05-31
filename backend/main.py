@@ -165,6 +165,39 @@ async def health():
         "gemini_configured": bool(GEMINI_API_KEY)
     }
 
+@app.get("/monitor")
+async def monitor(email: str = ""):
+    if not email or "@" not in email:
+        return {"breaches": []}
+
+    email = email.lower()
+
+    if "safe" in email or "test" in email:
+        return {"breaches": []}
+
+    if "linkedin" in email:
+        return {
+            "breaches": [
+                {
+                    "breach_name": "LinkedIn 2021",
+                    "date": "2021-06-29",
+                    "description": "Demo result: this email appears in a simulated LinkedIn breach.",
+                    "action": "Change reused passwords and enable 2FA."
+                }
+            ]
+        }
+
+    return {
+        "breaches": [
+            {
+                "breach_name": "Demo Breach Database",
+                "date": "2024-01-15",
+                "description": "Demo result: this email appears in a simulated breach dataset.",
+                "action": "Use unique passwords and enable two-factor authentication."
+            }
+        ]
+    }
+
 
 @app.post("/analyze")
 async def analyze(req: AnalyzeRequest):

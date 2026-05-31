@@ -1,6 +1,6 @@
 
 // During development before Railway is up, use:
-export const API_BASE = 'http://127.0.0.1:8000/'
+export const API_BASE = 'http://127.0.0.1:8000'
 
 export const VECTOR_LABELS: Record<string, string> = {
   urgency_manipulation: 'Urgency',
