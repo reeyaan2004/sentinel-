@@ -4,7 +4,7 @@
   "version": "1.0.0",
   "description": "AI security agent powered by Gemini. Analyzes threats and acts on your behalf.",
   "permissions": ["activeTab", "storage", "alarms", "notifications", "scripting"],
-  "host_permissions": ["http://127.0.0.1:8000/*"],
+  "host_permissions": ["https://*/*", "http://*/*"],
   "action": {
     "default_popup": "src/popup/index.html",
     "default_icon": {
