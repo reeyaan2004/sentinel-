@@ -1,14 +1,14 @@
 
 import os
 import json
-import google.generativeai as genai
+from google import genai
 from dotenv import load_dotenv
 
 load_dotenv()
 
-genai.configure(api_key=os.getenv("GEMINI_API_KEY"))
+client = genai.Client(api_key=os.getenv("GEMINI_API_KEY"))
 
-model = genai.GenerativeModel("gemini-2.0-flash")
+model = "gemini-2.0-flash"
 
 SYSTEM_PROMPT = """
 You are a cybersecurity analyst.
@@ -32,13 +32,13 @@ Return format:
 """
 
 def analyze_content(text: str):
-    response = model.generate_content(
-        SYSTEM_PROMPT + "\n\nTEXT:\n" + text
+    response = client.models.generate_content(
+        model=model,
+        contents=SYSTEM_PROMPT + "\n\nTEXT:\n" + text
     )
 
     raw = response.text.strip()
 
-    # safe parsing (VERY IMPORTANT)
     if "```" in raw:
         raw = raw.replace("```json", "").replace("```", "")
 
