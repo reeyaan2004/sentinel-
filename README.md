@@ -141,9 +141,6 @@ The extension communicates with a backend API for threat analysis. The API retur
 - Brave
 - Other Chromium-based browsers
 
-## License
-
-[Specify your license here]
 
 ## Contributing
 
