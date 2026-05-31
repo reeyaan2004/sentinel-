@@ -146,7 +146,7 @@ export default function ThreatRadar({ vectors, score, verdict }: {
           transition={{ delay: 0.4 }}
           style={{ filter: `drop-shadow(0 0 10px ${color})` }}
         >
-          {score}
+          {score ?? 0}
         </motion.text>
         <motion.text
           x={CX} y={CY + 13}
