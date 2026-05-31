@@ -1,5 +1,6 @@
 import os
 import json
+import uuid
 from dotenv import load_dotenv
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
@@ -17,14 +18,11 @@ GEMINI_API_KEY = os.getenv("GEMINI_API_KEY", "")
 print("RUNNING FILE:", os.path.abspath(__file__))
 
 # ─────────────────────────────────────────────
-# GEMINI CLIENT (NEW SDK)
+# GEMINI CLIENT
 # ─────────────────────────────────────────────
 
 client = genai.Client(api_key=GEMINI_API_KEY)
 MODEL = "gemini-2.5-flash"
-
-for m in client.models.list():
-    print(m.name)
 
 if GEMINI_API_KEY:
     print(f"✓ Gemini configured. Key ends in: ...{GEMINI_API_KEY[-4:]}")
@@ -82,10 +80,10 @@ Return ONLY valid JSON in this exact format:
 """
 
 # ─────────────────────────────────────────────
-# FALLBACK (IMPORTANT)
+# FALLBACK
 # ─────────────────────────────────────────────
 
-FALLBACK = {
+FALLBACK_RAW = {
     "overall_score": 85,
     "verdict": "DANGEROUS",
     "summary": "This message shows strong phishing indicators including urgency and impersonation tactics.",
@@ -114,22 +112,47 @@ FALLBACK = {
 
 def safe_parse_json(text: str):
     text = text.strip()
-
     try:
         return json.loads(text)
     except:
         pass
-
     start = text.find("{")
     end = text.rfind("}") + 1
-
     if start != -1 and end != -1:
         try:
             return json.loads(text[start:end])
         except:
             pass
-
     raise ValueError("Invalid JSON from model")
+
+
+def transform(result: dict) -> dict:
+    key_map = {
+        "urgency_manipulation": "urgency_manipulation",
+        "domain_spoofing": "domain_spoofing",
+        "credential_harvesting": "credential_harvesting",
+        "impersonation_signals": "impersonation",
+        "emotional_manipulation": "emotional_manipulation",
+        "url_anomalies": "url_anomalies",
+        "attack_patterns": "attack_patterns",
+        "linguistic_tells": "linguistic_tells",
+    }
+    vectors_dict = {}
+    for v in result.get("vectors", []):
+        name = v.get("name", "")
+        mapped = key_map.get(name, name)
+        vectors_dict[mapped] = min(10, v.get("score", 0) // 10)
+
+    return {
+        "scan_id": str(uuid.uuid4()),
+        "score": int(result.get("overall_score", 0)),
+        "verdict": result.get("verdict", "SAFE"),
+        "vectors": vectors_dict,
+        "red_flags": result.get("red_flags", []),
+        "summary": result.get("summary", ""),
+        "eli5": result.get("eli5_summary", ""),
+        "action_plan": [result.get("recommendation", "")] if result.get("recommendation") else [],
+    }
 
 # ─────────────────────────────────────────────
 # ENDPOINTS
@@ -160,16 +183,12 @@ async def analyze(req: AnalyzeRequest):
 
     if not GEMINI_API_KEY:
         print("No API key → fallback")
-        return FALLBACK
+        return transform(FALLBACK_RAW)
 
     try:
         print("Calling Gemini...")
 
-        full_prompt = f"""{PROMPT}
-
-MESSAGE:
-{text}
-"""
+        full_prompt = f"{PROMPT}\n\nMESSAGE:\n{text}"
 
         response = client.models.generate_content(
             model=MODEL,
@@ -181,28 +200,21 @@ MESSAGE:
 
         result = safe_parse_json(raw)
 
-        # validation
-        required = [
-            "overall_score", "verdict", "summary",
-            "eli5_summary", "vectors", "red_flags", "recommendation"
-        ]
-
+        required = ["overall_score", "verdict", "summary", "eli5_summary", "vectors", "red_flags"]
         if any(k not in result for k in required):
             print("Missing keys → fallback")
-            return FALLBACK
-
-        result["overall_score"] = int(result["overall_score"])
+            return transform(FALLBACK_RAW)
 
         if result["verdict"] not in ["SAFE", "SUSPICIOUS", "DANGEROUS"]:
-            return FALLBACK
+            return transform(FALLBACK_RAW)
 
         print("Parsed OK")
         print("Score:", result["overall_score"])
         print("Verdict:", result["verdict"])
         print("=" * 50)
 
-        return result
+        return transform(result)
 
     except Exception as e:
         print("Gemini error:", type(e).__name__, str(e))
-        return FALLBACK
+        return transform(FALLBACK_RAW)
