@@ -37,6 +37,7 @@ export default function ThreatRadar({ vectors, score, verdict }: {
   verdict: Verdict
 }) {
   const color = verdictColor(verdict)
+  if (!vectors) return null
   const n = VECTOR_KEYS.length
   const step = 360 / n
 

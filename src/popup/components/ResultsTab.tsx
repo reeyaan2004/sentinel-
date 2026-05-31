@@ -29,7 +29,7 @@ export default function ResultsTab({ result, actionsFired, onProtect }: {
       <ELI5Toggle summary={result.summary} eli5={result.eli5} />
 
       {/* Red flags */}
-      {result.red_flags.length > 0 && (
+      {(result.red_flags?.length ?? 0) > 0 && (
         <div className="glass" style={{ padding: '10px 14px' }}>
           <div style={{ fontSize: 9, color: '#FF4D6D', fontWeight: 800, letterSpacing: 1.5, marginBottom: 8 }}>
             🚨 RED FLAGS DETECTED
@@ -49,7 +49,7 @@ export default function ResultsTab({ result, actionsFired, onProtect }: {
       )}
 
       {/* Action plan */}
-      {result.action_plan.length > 0 && (
+      {(result.action_plan?.length ?? 0) > 0 && (
         <div className="glass" style={{ padding: '10px 14px' }}>
           <div style={{ fontSize: 9, color: 'rgba(255,255,255,0.35)', fontWeight: 800, letterSpacing: 1.5, marginBottom: 8 }}>
             WHAT TO DO NOW
